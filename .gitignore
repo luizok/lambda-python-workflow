@@ -1,0 +1,10 @@
+.pytest_cache/
+__pycache__/
+.env
+.coverage
+.vscode/
+out/*
+!out/.gitkeep
+!out/tests/
+out/tests/*
+!out/tests/.gitkeep

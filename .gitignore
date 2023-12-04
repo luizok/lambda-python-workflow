@@ -11,3 +11,10 @@ out/tests/*
 config.aws.tfbackend
 .terraform
 .terraform.lock.hcl
+!packages/
+packages/*
+!packages/.gitkeep
+!packages/python/
+packages/python/*
+!packages/python/.gitkeep
+

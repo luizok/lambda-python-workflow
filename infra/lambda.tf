@@ -6,6 +6,20 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = filebase64sha256(data.archive_file.source_code.output_path)
   runtime          = "python3.11"
   timeout          = 60
+
+  layers = [
+    aws_lambda_layer_version.packages.arn
+  ]
+}
+
+resource "aws_lambda_layer_version" "packages" {
+  filename         = data.archive_file.packages.output_path
+  layer_name       = "${var.lambda-name}-packages"
+  description      = "Packages for ${var.lambda-name} >> ${file("../requirements.txt")}"
+  source_code_hash = filebase64sha256(data.archive_file.packages.output_path)
+  compatible_runtimes = [
+    "python3.11"
+  ]
 }
 
 resource "aws_iam_role" "iam_for_lambda" {

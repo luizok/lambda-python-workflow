@@ -28,6 +28,19 @@ data "archive_file" "source_code" {
 
 data "archive_file" "packages" {
   type        = "zip"
-  source_dir  = "../app/"
-  output_path = "../out/lambda.zip"
+  source_dir  = "../out/packages/"
+  output_path = "../out/packages.zip"
+
+  depends_on = [ null_resource.install_packages ]
+}
+
+resource "null_resource" "install_packages" {
+  provisioner "local-exec" {
+    command = "sh ./install_packages.sh"
+  }
+
+  triggers = {
+    requirements_changed = filebase64sha256("../requirements.txt")
+    script_changed = filebase64sha256("./install_packages.sh")
+  }
 }

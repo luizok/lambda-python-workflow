@@ -3,3 +3,4 @@ pytest-cov
 mock
 flake8
 isort
+requests

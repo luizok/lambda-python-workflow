@@ -1,3 +1,5 @@
+import requests
+
 from src.foo import Foo
 
 

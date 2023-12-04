@@ -4,13 +4,13 @@ test_cmd = dotenv run pytest -v --rootdir=$(app_path)
 tf_cmd = dotenv run terraform -chdir=$(infra_path)
 
 run:
-	dotenv run python $(app_path)/main.py
+	dotenv run python $(app_path)/lambda_function.py
 
 test:
 	$(test_cmd)
 
 isort:
-	dotenv run python -m isort
+	dotenv run python -m isort $(app_path)/**/*.py
 
 lint:
 	dotenv run flake8 $(app_path)

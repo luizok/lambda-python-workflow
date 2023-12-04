@@ -1,0 +1,33 @@
+provider "aws" {
+  default_tags {
+    tags = {
+      project = var.project-name
+    }
+  }
+}
+
+provider "archive" {}
+
+terraform {
+  backend "s3" {}
+}
+
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+}
+
+data "archive_file" "source_code" {
+  type        = "zip"
+  source_dir  = "../app/"
+  output_path = "../out/lambda.zip"
+}
+
+data "archive_file" "packages" {
+  type        = "zip"
+  source_dir  = "../app/"
+  output_path = "../out/lambda.zip"
+}

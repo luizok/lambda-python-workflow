@@ -69,7 +69,7 @@ jobs:
       - name: Terraform Validate
         working-directory: ${{ env.INFRA_DIR }}
         run: |
-          terraform validate -var-file=values.tfvars
+          terraform validate
 
       - name: Terraform Plan
         working-directory: ${{ env.INFRA_DIR }}

@@ -84,14 +84,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get Branch Name
-        id: branch
-        run: |
-          echo "::set-output name=name::$(git rev-parse --abbrev-ref HEAD)"
-
       - name: Create PR
         run: |
-          gh_pr_up() { gh pr create $* || gh pr edit $*; }
-          gh_pr_up \
-            --title "My pull request" \
-            --body "Description"
+          gh pr create \
+            --title "Feature Pipeline" \
+            --body "Feature Pipeline" \
+            --base develop

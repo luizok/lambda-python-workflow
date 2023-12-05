@@ -64,14 +64,14 @@ jobs:
       - name: Terraform Init
         working-directory: ${{ env.INFRA_DIR }}
         run: |
-          terraform init
+          terraform init -backend-config=config.aws.tfbackend
 
       - name: Terraform Validate
         working-directory: ${{ env.INFRA_DIR }}
         run: |
-          terraform validate
+          terraform validate -backend-config=config.aws.tfbackend
 
       - name: Terraform Plan
         working-directory: ${{ env.INFRA_DIR }}
         run: |
-          terraform plan
+          terraform plan -backend-config=config.aws.tfbackend

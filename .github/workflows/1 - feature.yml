@@ -87,7 +87,7 @@ jobs:
       - name: Get Branch Name
         id: branch
         run: |
-          echo "{name}={$(git rev-parse --abbrev-ref HEAD)}" >> "$GITHUB_OUTPUT"
+          echo "::set-output name=name::$(git rev-parse --abbrev-ref HEAD)"
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v3

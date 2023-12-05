@@ -48,4 +48,4 @@ show:
 	$(tf_cmd) show
 
 destroy:
-	$(tf_cmd) destroy
+	$(tf_cmd) destroy -var-file values.tfvars

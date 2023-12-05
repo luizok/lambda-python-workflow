@@ -16,7 +16,6 @@ resource "aws_lambda_layer_version" "packages" {
   filename         = data.archive_file.packages.output_path
   layer_name       = "${var.lambda-name}-packages"
   description      = "Packages for ${var.lambda-name} >> ${file("../requirements.txt")}"
-  source_code_hash = filebase64sha256(data.archive_file.packages.output_path)
   compatible_runtimes = [
     "python3.11"
   ]

@@ -90,6 +90,7 @@ jobs:
           echo "::set-output name=name::$(git rev-parse --abbrev-ref HEAD)"
 
       - name: Create PR
+        id: create_pr
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -101,3 +102,8 @@ jobs:
           branch: develop
           base: ${{ steps.branch.outputs.name }}
           draft: true
+
+      - name: Outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.create_pr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.create_pr.outputs.pull-request-url }}"

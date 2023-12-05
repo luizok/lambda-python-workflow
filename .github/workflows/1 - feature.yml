@@ -89,7 +89,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: ":twisted_rightwards_arrows: Create PR to develop"
-          title: "chore: create PR to develop"
+          title: "PR: feature/* >> develop"
           body: |
             This PR was created automatically by a GitHub Action.
             Please review the proposed changes and merge if they look good.

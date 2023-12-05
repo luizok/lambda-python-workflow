@@ -88,10 +88,13 @@ jobs:
 
       - name: Create PR
         run: |
-          gh pr create \
-            --title "Auto PR: feature/* >> develop/" \
-            --body "Feature Pipeline" \
-            --base develop
+          args='
+            gh pr GH_CMD \
+            --title "test" \
+            --body "test" \
+            --base "develop"
+          '
+          eval "${args/GH_CMD/create}" || eval "${args/GH_CMD/edit}"
 
       - name: Change Test
         run: |

@@ -1,4 +1,4 @@
-name: Develop Pipeline
+name: Homolog Pipeline
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Run terraform
         run: |
-            Terraform is running to deploy the infrastructure
+            echo "Terraform is running to deploy the infrastructure"
 
 #       - name: Install Terraform
 #         uses: hashicorp/setup-terraform@v1
@@ -52,6 +52,7 @@ jobs:
   cpr:
     name: Create PR to main
     runs-on: ubuntu-latest
+    needs: terraform
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:

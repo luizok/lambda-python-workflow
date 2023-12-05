@@ -91,15 +91,19 @@ jobs:
         run: |
           echo "::set-output name=name::$(git rev-parse --abbrev-ref HEAD)"
 
-      - name: Create PR
+      - name: Verify If PR already exists
+        id: pr
         run: |
-          args='
-            gh pr GH_CMD \
+          echo "::set-output name=exists::false"
+          gh pr list --base develop --state open | grep ${{ steps.branch.outputs.name }} || echo "::set-output name=exists::true"
+
+      - name: Create PR
+        if: steps.pr.outputs.exists == 'false'
+        run: |
+          gh pr create \
             --title "Auto PR: ${{ steps.branch.outputs.name }} > develop" \
             --body "test" \
             --base "develop"
-          '
-          eval "${args/GH_CMD/create}" || eval "${args/GH_CMD/edit}"
 
       - name: Change Test
         run: |

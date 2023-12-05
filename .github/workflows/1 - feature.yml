@@ -80,30 +80,15 @@ jobs:
     name: Create PR to develop
     runs-on: ubuntu-latest
     needs: terraform
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get Branch Name
-        id: branch
-        run: |
-          echo "::set-output name=name::$(git rev-parse --abbrev-ref HEAD)"
-
       - name: Create PR
-        id: create_pr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: ":twisted_rightwards_arrows: Create PR to develop"
-          title: "PR: feature/ >> develop"
-          body: |
-            This PR was created automatically by a GitHub Action.
-            Please review the proposed changes and merge if they look good.
-          branch: develop
-          base: ${{ steps.branch.outputs.name }}
-          draft: true
-
-      - name: Outputs
         run: |
-          echo "Pull Request Number - ${{ steps.create_pr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.create_pr.outputs.pull-request-url }}"
+          gh pr create \
+            --title "Feature Pipeline" \
+            --body "Feature Pipeline" \
+            --base develop

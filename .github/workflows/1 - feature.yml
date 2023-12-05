@@ -54,6 +54,13 @@ jobs:
         with:
           terraform_version: 1.0.9
 
+      - name: Generate Terraform S3 Backend Config
+        working-directory: ${{ env.INFRA_DIR }}
+        run: |
+          echo "bucket = \"${{ secrets.BUCKET_TERRAFORM }}\"" >> config.aws.tfbackend
+          echo "key = $(basename $(git rev-parse --show-toplevel))" >> config.aws.tfbackend
+          echo "region = \"${{ env.AWS_DEFAULT_REGION }}\"" >> config.aws.tfbackend
+
       - name: Terraform Init
         working-directory: ${{ env.INFRA_DIR }}
         run: |

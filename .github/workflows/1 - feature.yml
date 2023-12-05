@@ -99,4 +99,4 @@ jobs:
             This PR was created automatically by a GitHub Action.
             Please review the proposed changes and merge if they look good.
           base: develop
-          branch: steps.branch.outputs.name
+          branch: ${{ steps.branch.outputs.name }}

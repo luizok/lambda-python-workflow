@@ -1,0 +1,77 @@
+name: Feature Pipeline
+
+on:
+  push:
+    branches:
+      - develop/
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  INFRA_DIR: infra/
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: sa-east-1
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.INFRA_DIR }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.6.5
+
+      - name: Generate Terraform S3 Backend Config
+        run: |
+          echo "bucket = \"${{ secrets.BUCKET_TERRAFORM }}\"" >> config.aws.tfbackend
+          echo "key = \"$(basename $(git rev-parse --show-toplevel))\"" >> config.aws.tfbackend
+          echo "region = \"${{ env.AWS_DEFAULT_REGION }}\"" >> config.aws.tfbackend
+
+      - name: Terraform Init
+        run: |
+          terraform init -backend-config config.aws.tfbackend
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -var-file=values.tfvars -auto-approve
+
+  cpr:
+    name: Create PR to homolog
+    runs-on: ubuntu-latest
+    needs: terraform
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get Branch Name
+        id: branch
+        run: |
+          echo "::set-output name=name::$(git rev-parse --abbrev-ref HEAD)"
+
+      - name: Verify If PR already exists
+        id: pr
+        run: |
+          echo "::set-output name=exists::false"
+          gh pr list --base homolog --state open | \
+            grep ${{ steps.branch.outputs.name }} && echo "::set-output name=exists::true" || \
+            exit 0
+
+      - name: Create PR
+        if: steps.pr.outputs.exists == 'false'
+        run: |
+          gh pr create \
+            --title "Auto PR: ${{ steps.branch.outputs.name }} > homolog" \
+            --body "test" \
+            --base "homolog"

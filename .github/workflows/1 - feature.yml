@@ -100,3 +100,4 @@ jobs:
             Please review the proposed changes and merge if they look good.
           branch: develop
           base: ${{ steps.branch.outputs.name }}
+          draft: true

@@ -8,3 +8,13 @@ out/*
 !out/tests/
 out/tests/*
 !out/tests/.gitkeep
+config.aws.tfbackend
+.terraform
+.terraform.lock.hcl
+!out/packages/
+out/packages/*
+!out/packages/.gitkeep
+!out/packages/python/
+out/packages/python/*
+!packages/python/.gitkeep
+

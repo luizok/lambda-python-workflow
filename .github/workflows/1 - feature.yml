@@ -99,9 +99,8 @@ jobs:
           body: |
             This PR was created automatically by a GitHub Action.
             Please review the proposed changes and merge if they look good.
-          branch: develop
-          base: ${{ steps.branch.outputs.name }}
-          draft: true
+          base: develop
+          branch: ${{ steps.branch.outputs.name }}
 
       - name: Outputs
         run: |

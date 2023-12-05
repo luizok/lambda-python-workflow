@@ -84,6 +84,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Get Branch Name
+        id: branch
+        run: |
+          echo "{name}={$(git rev-parse --abbrev-ref HEAD)}" >> "$GITHUB_OUTPUT"
+
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
         with:
@@ -93,4 +98,5 @@ jobs:
           body: |
             This PR was created automatically by a GitHub Action.
             Please review the proposed changes and merge if they look good.
-          branch: develop
+          base: develop
+          branch: branch.name

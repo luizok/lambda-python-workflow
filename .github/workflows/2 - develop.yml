@@ -1,9 +1,9 @@
-name: Feature Pipeline
+name: Develop Pipeline
 
 on:
   push:
     branches:
-      - develop/
+      - develop
 
 permissions:
   contents: write

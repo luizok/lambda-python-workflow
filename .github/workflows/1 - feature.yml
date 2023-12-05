@@ -109,4 +109,4 @@ jobs:
 
       - name: Change Test
         run: |
-          echo "test 2" >> test.txt
+          echo "test 3" >> test.txt

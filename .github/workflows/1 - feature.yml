@@ -93,8 +93,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          base: new-branch
-          branch: ${{ steps.branch.outputs.name }}
+          base: develop
       - name: Check outputs
         run: |
           echo "Pull Request Number - ${{ steps.create_pr.outputs.pull-request-number }}"

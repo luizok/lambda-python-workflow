@@ -95,7 +95,9 @@ jobs:
         id: pr
         run: |
           echo "::set-output name=exists::false"
-          gh pr list --base develop --state open | grep ${{ steps.branch.outputs.name }} || echo "::set-output name=exists::true"
+          gh pr list --base develop --state open | \
+            grep ${{ steps.branch.outputs.name }} && echo "::set-output name=exists::true" || \
+            exit 0
 
       - name: Create PR
         if: steps.pr.outputs.exists == 'false'

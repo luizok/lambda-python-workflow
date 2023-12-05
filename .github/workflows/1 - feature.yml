@@ -89,6 +89,6 @@ jobs:
       - name: Create PR
         run: |
           gh pr create \
-            --title "Feature Pipeline" \
+            --title "Auto PR: feature/* >> develop/" \
             --body "Feature Pipeline" \
             --base develop

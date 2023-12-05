@@ -92,3 +92,7 @@ jobs:
             --title "Auto PR: feature/* >> develop/" \
             --body "Feature Pipeline" \
             --base develop
+
+      - name: Change Test
+        run: |
+          echo "test" >> test.txt

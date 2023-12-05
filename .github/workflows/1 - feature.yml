@@ -52,7 +52,7 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.0.9
+          terraform_version: 1.6.5
 
       - name: Generate Terraform S3 Backend Config
         working-directory: ${{ env.INFRA_DIR }}

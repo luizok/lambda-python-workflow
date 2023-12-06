@@ -24,7 +24,7 @@ jobs:
         curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
           -H "Content-Type: application/json" \
           -d '{
-            "repository": ${{ github.repository }},
+            "repository": "${{ github.repository }}",
             "workflow_id": ${{ github.run_id }},
           }'
 

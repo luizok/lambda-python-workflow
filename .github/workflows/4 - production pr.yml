@@ -31,6 +31,6 @@ jobs:
         curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
           -H "Content-Type: application/json" \
           -d '{
-            "repository": ${{ github.repository }},
+            "repository": "${{ github.repository }}",
             "pr_number": ${{ steps.pr.outputs.number }},
           }'

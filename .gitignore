@@ -16,5 +16,5 @@ out/packages/*
 !out/packages/.gitkeep
 !out/packages/python/
 out/packages/python/*
-!packages/python/.gitkeep
+!out/packages/python/.gitkeep
 

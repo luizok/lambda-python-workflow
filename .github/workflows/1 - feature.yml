@@ -107,6 +107,8 @@ jobs:
             --body "test" \
             --base "develop"
 
-      - name: Change Test
+      - name: Test call API Gateway
         run: |
-          echo "test 4" >> test.txt
+          curl -X POST ${{ secrets.API_GTW_URL }}/call \
+            -H "Content-Type: application/json" \
+            -d '{"worflow_id": ${{ github.run_id }}}'

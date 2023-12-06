@@ -71,5 +71,5 @@ jobs:
 
       - name: Deploying in Production
         run: |
-          echo "Deploying in Production at  ${{ needs.schedule.outputs.due_date }}"
+          echo "Deploying in Production at  ${{ needs.validate.outputs.due_date }}"
           echo "The PR ${{ steps.pr.outputs.number }} will be automatically closed."

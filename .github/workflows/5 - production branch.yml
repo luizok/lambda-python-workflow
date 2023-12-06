@@ -1,0 +1,45 @@
+name: Production Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+env:
+  INFRA_DIR: infra/
+
+jobs:
+  schedule:
+    name: Production Pipeline
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name:  Schedule Implatation
+      run: |
+        curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repository": ${{ github.repository }},
+            "workflow_id": ${{ github.run_id }},
+          }'
+
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    needs: schedule
+    environment: prod
+    defaults:
+      run:
+        working-directory: ${{ env.INFRA_DIR }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run terraform
+        run: |
+            echo "Terraform is running to deploy the infrastructure"

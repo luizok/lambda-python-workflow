@@ -1,0 +1,36 @@
+name: PR Validation Pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  INFRA_DIR: infra/
+
+jobs:
+  validate:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get PR Number
+      id: pr
+      run: |
+        echo "::set-output name=number::$(echo $GITHUB_REF | cut -d'/' -f3)"
+
+    - name: Valdiate Due Date in PR Message
+      run: |
+        curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repository": ${{ github.repository }},
+            "pr_number": ${{ steps.pr.outputs.number }},
+          }'

@@ -30,4 +30,6 @@ jobs:
           -d '{
             "repository": "${{ github.repository }}",
             "pr_number": ${{ steps.pr.outputs.number }},
-          }'
+          }' > res.json
+
+        test $(cat res.json | jq -r '.isValid') = "true"

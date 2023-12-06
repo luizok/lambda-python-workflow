@@ -106,9 +106,3 @@ jobs:
             --title "Auto PR: ${{ steps.branch.outputs.name }} > develop" \
             --body "test" \
             --base "develop"
-
-      - name: Test call API Gateway
-        run: |
-          curl -X POST ${{ secrets.API_GTW_URL }}/call \
-            -H "Content-Type: application/json" \
-            -d '{"worflow_id": ${{ github.run_id }}}'

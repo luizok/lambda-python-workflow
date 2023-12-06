@@ -10,9 +10,6 @@ permissions:
   contents: write
   pull-requests: write
 
-env:
-  INFRA_DIR: infra/
-
 jobs:
   validate:
     name: PR Validation

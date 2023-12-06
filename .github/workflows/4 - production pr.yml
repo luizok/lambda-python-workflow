@@ -32,7 +32,7 @@ jobs:
           -H "Content-Type: application/json" \
           -d '{
             "repository": "${{ github.repository }}",
-            "pr_number": ${{ steps.pr.outputs.number }},
+            "pr_number": ${{ steps.pr.outputs.number }}
           }' > res.json
 
         cat res.json
@@ -55,7 +55,7 @@ jobs:
           -d '{
             "repository": "${{ github.repository }}",
             "workflow_id": ${{ github.run_id }},
-            "due_date": "${{ needs.validate.outputs.due_date }}",
+            "due_date": "${{ needs.validate.outputs.due_date }}"
           }'
 
   await:

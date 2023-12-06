@@ -37,7 +37,7 @@ jobs:
 
         cat res.json
 
-        echo "::set-output name=due_date::$(cat res.json | jq -r '.dueDate')"
+        echo "::set-output name=value::$(cat res.json | jq -r '.dueDate')"
         test $(cat res.json | jq -r '.isValid') = "true"
 
   schedule:

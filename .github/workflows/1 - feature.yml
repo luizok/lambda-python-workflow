@@ -106,7 +106,3 @@ jobs:
             --title "Auto PR: ${{ steps.branch.outputs.name }} > develop" \
             --body "test" \
             --base "develop"
-
-      - name: Change Test
-        run: |
-          echo "test 4" >> test.txt

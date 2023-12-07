@@ -32,10 +32,12 @@ jobs:
           -H "Content-Type: application/json" \
           -d '{
             "repository": "${{ github.repository }}",
-            "pr_number": ${{ steps.pr.outputs.number }},
+            "pr_number": ${{ steps.pr.outputs.number }}
           }' > res.json
 
-        echo "::set-output name=due_date::$(cat res.json | jq -r '.dueDate')"
+        cat res.json
+
+        echo "::set-output name=value::$(cat res.json | jq -r '.dueDate')"
         test $(cat res.json | jq -r '.isValid') = "true"
 
   schedule:
@@ -53,7 +55,7 @@ jobs:
           -d '{
             "repository": "${{ github.repository }}",
             "workflow_id": ${{ github.run_id }},
-            "due_date": "${{ needs.validate.outputs.due_date }}",
+            "due_date": "${{ needs.validate.outputs.due_date }}"
           }'
 
   await:
@@ -61,7 +63,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [schedule, validate]
     environment: prod
+    env:
+      GH_TOKEN: ${{ secrets.GH_SYSTEM_TOKEN }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Get PR Number
         id: pr
         run: |
@@ -69,5 +76,10 @@ jobs:
 
       - name: Deploying in Production
         run: |
-          echo "Deploying in Production at  ${{ needs.schedule.outputs.due_date }}"
+          echo "Deploying in Production at  ${{ needs.validate.outputs.due_date }}"
           echo "The PR ${{ steps.pr.outputs.number }} will be automatically closed."
+          
+          gh pr merge ${{ steps.pr.outputs.number }} --auto
+
+        
+      

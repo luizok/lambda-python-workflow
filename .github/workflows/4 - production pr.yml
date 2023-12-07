@@ -63,6 +63,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [schedule, validate]
     environment: prod
+    env:
+      GH_TOKEN: ${{ secrets.GH_SYSTEM_TOKEN }}
     steps:
       - name: Get PR Number
         id: pr
@@ -73,3 +75,8 @@ jobs:
         run: |
           echo "Deploying in Production at  ${{ needs.validate.outputs.due_date }}"
           echo "The PR ${{ steps.pr.outputs.number }} will be automatically closed."
+          
+          gh pr merge ${{ steps.pr.outputs.number }} --auto
+
+        
+      

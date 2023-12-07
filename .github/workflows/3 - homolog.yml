@@ -59,5 +59,4 @@ jobs:
           gh pr create \
             --title "Auto PR: ${{ steps.branch.outputs.name }} > main" \
             --body "Brief resume. DUE DATE: yyyy-mm-ddTHH:MM:ss" \
-            --base "main" \
-            --auto
+            --base "main"

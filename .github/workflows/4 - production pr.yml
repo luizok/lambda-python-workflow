@@ -10,13 +10,12 @@ permissions:
   contents: write
   pull-requests: write
 
-env:
-  INFRA_DIR: infra/
-
 jobs:
   validate:
     name: PR Validation
     runs-on: ubuntu-latest
+    outputs:
+      due_date: ${{ steps.due_date.outputs.value }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -26,11 +25,61 @@ jobs:
       run: |
         echo "::set-output name=number::$(echo $GITHUB_REF | cut -d'/' -f3)"
 
-    - name: Valdiate Due Date in PR Message
+    - name: Validate PR Message
+      id: due_date
       run: |
         curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
           -H "Content-Type: application/json" \
           -d '{
-            "repository": ${{ github.repository }},
-            "pr_number": ${{ steps.pr.outputs.number }},
+            "repository": "${{ github.repository }}",
+            "pr_number": ${{ steps.pr.outputs.number }}
+          }' > res.json
+
+        cat res.json
+
+        echo "::set-output name=value::$(cat res.json | jq -r '.dueDate')"
+        test $(cat res.json | jq -r '.isValid') = "true"
+
+  schedule:
+    name: Schedule Implantation in Production
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name:  Schedule Implantation
+      run: |
+        curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repository": "${{ github.repository }}",
+            "workflow_id": ${{ github.run_id }},
+            "due_date": "${{ needs.validate.outputs.due_date }}"
           }'
+
+  await:
+    name: Await Implantation
+    runs-on: ubuntu-latest
+    needs: [schedule, validate]
+    environment: prod
+    env:
+      GH_TOKEN: ${{ secrets.GH_SYSTEM_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get PR Number
+        id: pr
+        run: |
+          echo "::set-output name=number::$(echo $GITHUB_REF | cut -d'/' -f3)"
+
+      - name: Deploying in Production
+        run: |
+          echo "Deploying in Production at  ${{ needs.validate.outputs.due_date }}"
+          echo "The PR ${{ steps.pr.outputs.number }} will be automatically closed."
+          
+          gh pr merge ${{ steps.pr.outputs.number }} --merge --auto
+
+        
+      

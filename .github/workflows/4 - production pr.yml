@@ -79,7 +79,7 @@ jobs:
           echo "Deploying in Production at  ${{ needs.validate.outputs.due_date }}"
           echo "The PR ${{ steps.pr.outputs.number }} will be automatically closed."
           
-          gh pr merge ${{ steps.pr.outputs.number }} --auto
+          gh pr merge ${{ steps.pr.outputs.number }} --merge --auto
 
         
       

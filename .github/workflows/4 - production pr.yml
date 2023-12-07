@@ -28,7 +28,7 @@ jobs:
     - name: Validate PR Message
       id: due_date
       run: |
-        curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
+        curl -X POST -s ${{ secrets.API_GTW_URL }}/validatePullRequest \
           -H "Content-Type: application/json" \
           -d '{
             "repository": "${{ github.repository }}",

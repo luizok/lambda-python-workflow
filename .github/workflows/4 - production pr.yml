@@ -25,6 +25,7 @@ jobs:
     - name: Get PR Number
       id: pr
       run: |
+        echo "${{ github.event_name }}"
         echo "::set-output name=number::$(echo $GITHUB_REF | cut -d'/' -f3)"
 
     - name:

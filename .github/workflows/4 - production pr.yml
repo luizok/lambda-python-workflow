@@ -28,7 +28,7 @@ jobs:
         echo "::set-output name=number::$(echo $GITHUB_REF | cut -d'/' -f3)"
 
     - name:
-      if: github.event_name == 'created'
+      if: github.event_name == 'opened'
       env:
         GH_TOKEN: ${{ secrets.GH_SYSTEM_TOKEN }}
       run: |

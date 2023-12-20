@@ -14,6 +14,8 @@ jobs:
   validate:
     name: PR Validation
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GH_SYSTEM_TOKEN }}
     outputs:
       due_date: ${{ steps.due_date.outputs.value }}
     steps:
@@ -25,10 +27,17 @@ jobs:
       run: |
         echo "::set-output name=number::$(echo $GITHUB_REF | cut -d'/' -f3)"
 
+    - name:
+      if: github.event.action == 'opened'
+      env:
+        GH_TOKEN: ${{ secrets.GH_SYSTEM_TOKEN }}
+      run: |
+        gh pr merge ${{ steps.pr.outputs.number }} --merge --auto
+
     - name: Validate PR Message
       id: due_date
       run: |
-        curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
+        curl -X POST -s ${{ secrets.API_GTW_URL }}/validatePullRequest \
           -H "Content-Type: application/json" \
           -d '{
             "repository": "${{ github.repository }}",
@@ -78,8 +87,3 @@ jobs:
         run: |
           echo "Deploying in Production at  ${{ needs.validate.outputs.due_date }}"
           echo "The PR ${{ steps.pr.outputs.number }} will be automatically closed."
-          
-          gh pr merge ${{ steps.pr.outputs.number }} --merge --auto
-
-        
-      

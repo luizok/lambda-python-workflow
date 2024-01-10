@@ -27,7 +27,7 @@ jobs:
       run: |
         echo "::set-output name=number::$(echo $GITHUB_REF | cut -d'/' -f3)"
 
-    - name:
+    - name: Enable Auto Merge
       if: github.event.action == 'opened'
       env:
         GH_TOKEN: ${{ secrets.GH_SYSTEM_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
 
     - name:  Schedule Implantation
       run: |
-        curl -X POST -s ${{ secrets.API_GTW_URL }}/call \
+        curl -X POST -s ${{ secrets.API_GTW_URL }}/createSchedule \
           -H "Content-Type: application/json" \
           -d '{
             "repository": "${{ github.repository }}",

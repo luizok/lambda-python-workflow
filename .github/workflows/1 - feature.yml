@@ -104,5 +104,5 @@ jobs:
         run: |
           gh pr create \
             --title "Auto PR: ${{ steps.branch.outputs.name }} > develop" \
-            --body "test" \
+            --body-file .github/pull_request_template.md \
             --base "develop"
